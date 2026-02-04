@@ -1,33 +1,38 @@
-import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
-export default function Navbar() {
+const Navbar = () => {
   const { cart } = useCart();
-  const productCount = cart.reduce((sum, product) => sum + product.quantity, 0);
+
+  const totalItems = cart.reduce(
+    (sum: number, item: any) => sum + item.quantity,
+    0
+  );
 
   return (
-    <header className="bg-[#3B1C32]/50 p-6 sticky top-0 z-50 backdrop-blur-md">
-      <nav>
-        <ul className="flex justify-between items-center">
-          <li>
-            <Link to="/" className="text-2xl">
-              Home
-            </Link>
-          </li>
+    <nav className="bg-black text-white px-6 py-4 flex justify-between items-center">
+      {/* LOGO */}
+      <Link to="/" className="text-2xl font-bold">
+        🛍️ PremiumStore
+      </Link>
 
-          <li>
-            <Link to="/cart" className="flex gap-x-2">
-              <ShoppingCart className="size-10" />
-              {productCount > 0 && (
-                <span className="bg-[#A64D79] text-white text-lg rounded-full w-8 h-8 flex items-center justify-center">
-                  {productCount}
-                </span>
-              )}
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+      {/* LINKS */}
+      <div className="flex items-center gap-6">
+        <Link to="/" className="hover:text-gray-300">
+          Home
+        </Link>
+
+        <Link to="/cart" className="relative hover:text-gray-300">
+          Cart 🛒
+          {totalItems > 0 && (
+            <span className="absolute -top-2 -right-3 bg-red-500 text-xs px-2 py-0.5 rounded-full">
+              {totalItems}
+            </span>
+          )}
+        </Link>
+      </div>
+    </nav>
   );
-}
+};
+
+export default Navbar;

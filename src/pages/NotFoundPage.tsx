@@ -1,7 +1,10 @@
-export default function NotFoundPage() {
+const NotFoundPage = () => {
   return (
-    <section className="flex flex-col gap-y-4 justify-center items-center h-screen">
-      <h1 className="text-4xl font-bold text-[#A64D79]">Page Not Found</h1>
-    </section>
+    <div className="text-center mt-20">
+      <h1 className="text-3xl font-bold">404</h1>
+      <p>Page Not Found</p>
+    </div>
   );
-}
+};
+
+export default NotFoundPage;

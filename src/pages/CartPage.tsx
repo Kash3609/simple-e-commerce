@@ -1,95 +1,76 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import { useCart } from "../context/CartContext";
-import { Minus, Plus, Trash2 } from "lucide-react";
 
-export default function CartPage() {
-  const {
-    cart,
-    cartProducts,
-    removeFromCart,
-    addToCart,
-    deleteFromCart,
-    cartTotal,
-  } = useCart();
+const CartPage = () => {
+  const { cart, removeFromCart, total } = useCart();
+  const [paid, setPaid] = useState(false);
+
+  if (cart.length === 0) {
+    return (
+      <div className="p-10 text-center text-xl">
+        🛒 Your cart is empty
+      </div>
+    );
+  }
 
   return (
-    <section className="space-y-12">
-      <h2 className="text-4xl font-bold">Shopping Cart</h2>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">Your Cart</h1>
 
-      {cart.length === 0 ? (
-        <div className="flex flex-col items-center gap-y-4">
-          <h2>Your cart is empty.</h2>
-          <Link
-            to="/"
-            className="flex items-center justify-center gap-x-4 bg-[#A64D79] px-4 py-2 rounded-sm text-lg"
+      {/* CART ITEMS */}
+      <div className="space-y-6">
+        {cart.map((item) => (
+          <div
+            key={item.id}
+            className="flex items-center justify-between bg-[#222] p-4 rounded-xl shadow-md"
           >
-            Continue Shopping
-          </Link>
-        </div>
-      ) : (
-        <>
-          <div className="space-y-8">
-            {cartProducts.map((cartProduct) => (
-              <div
-                key={cartProduct.id}
-                className="flex gap-4 justify-between border-b border-[#A64D79]  pb-4"
-              >
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                  <Link to={`/${cartProduct.url}`}>
-                    <figure className="size-24 md:size-48">
-                      <img
-                        src={cartProduct.image}
-                        alt={cartProduct.name}
-                        className="rounded-sm size-full object-cover"
-                      />
-                    </figure>
-                  </Link>
+            <div className="flex items-center gap-4">
+              <img
+                src={item.image}
+                alt={item.title}
+                className="h-20 w-20 object-contain bg-white p-2 rounded"
+              />
 
-                  <div>
-                    <p className="font-bold text-[#A64D79]">
-                      {cartProduct.name}
-                    </p>
-                    <p>${cartProduct.price}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-x-4">
-                  <div className="flex justify-between flex-col-reverse items-center gap-4 border border-[#3B1C32] rounded-sm p-2 lg:w-fit lg:gap-x-8 sm:flex-row">
-                    <button
-                      className="border border-[#A64D79] rounded-sm px-2 py-1 cursor-pointer disabled:bg-gray-700 disabled:border-transparent"
-                      onClick={() => removeFromCart(cartProduct.id)}
-                    >
-                      <Minus className="size-5 text-white" />
-                    </button>
-
-                    <span>{cartProduct.quantity}</span>
-
-                    <button
-                      className="border border-[#A64D79]  rounded-sm px-2 py-1 cursor-pointer"
-                      onClick={() => addToCart(cartProduct.id)}
-                    >
-                      <Plus className="size-5 text-white" />
-                    </button>
-                  </div>
-
-                  <button onClick={() => deleteFromCart(cartProduct.id)}>
-                    <Trash2 className="size-5 text-red-500" />
-                  </button>
-                </div>
+              <div>
+                <h2 className="font-semibold">{item.title}</h2>
+                <p className="text-sm text-gray-300">
+                  Qty: {item.quantity}
+                </p>
+                <p className="font-bold">₹ {item.price}</p>
               </div>
-            ))}
-          </div>
+            </div>
 
-          <div>
-            <p className="text-2xl text-[#A64D79]">
-              Total:{" "}
-              <span className="text-white font-bold">
-                ${cartTotal.toFixed(2)}
-              </span>
-            </p>
+            <button
+              onClick={() => removeFromCart(item.id)}
+              className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white"
+            >
+              Remove
+            </button>
           </div>
-        </>
-      )}
-    </section>
+        ))}
+      </div>
+
+      {/* TOTAL + PAYMENT */}
+      <div className="mt-10 bg-[#1a1a1d] p-6 rounded-xl shadow-lg text-center">
+        <h2 className="text-2xl font-bold mb-4">
+          Total Amount: ₹ {total ? total.toFixed(2) : "0.00"}
+        </h2>
+
+        {!paid ? (
+          <button
+            onClick={() => setPaid(true)}
+            className="bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg text-lg font-semibold"
+          >
+            Proceed to Payment
+          </button>
+        ) : (
+          <p className="text-green-400 text-xl font-semibold mt-4">
+            ✅ Booking Confirmed! Thank you for shopping 💖
+          </p>
+        )}
+      </div>
+    </div>
   );
-}
+};
+
+export default CartPage;
