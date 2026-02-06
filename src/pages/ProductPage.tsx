@@ -1,50 +1,36 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Reviews from "../components/Reviews";
 import { useCart } from "../context/CartContext";
+import Reviews from "../components/Reviews";
 
 const ProductPage = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState<any>(null);
   const { addToCart } = useCart();
+  const [product, setProduct] = useState<any>(null);
 
   useEffect(() => {
     fetch(`https://fakestoreapi.com/products/${id}`)
-      .then((res) => res.json())
-      .then((data) => setProduct(data));
+      .then(res => res.json())
+      .then(data => setProduct(data));
   }, [id]);
 
-  if (!product) return <p className="text-center mt-20">Loading...</p>;
+  if (!product) return <p>Loading...</p>;
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10">
-      <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-xl p-6 grid md:grid-cols-2 gap-8">
+    <div className="p-6">
+      <img src={product.image} className="h-60 mx-auto" />
+      <h1 className="text-2xl mt-4">{product.title}</h1>
+      <p className="mt-2">{product.description}</p>
+      <p className="mt-2 font-bold">₹ {product.price}</p>
 
-        <img
-          src={product.image}
-          className="h-72 mx-auto object-contain"
-        />
+      <button
+        onClick={() => addToCart(product)}
+        className="mt-4 bg-blue-500 px-4 py-2 text-white rounded"
+      >
+        Add to Cart
+      </button>
 
-        <div>
-          <h1 className="text-2xl font-bold">{product.title}</h1>
-          <p className="text-gray-600 mt-3">{product.description}</p>
-
-          <p className="mt-4 text-2xl font-bold text-green-600">
-            ₹ {product.price}
-          </p>
-
-          <button
-            onClick={() => addToCart(product)}
-            className="mt-6 w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition"
-          >
-            Add to Cart
-          </button>
-        </div>
-      </div>
-
-      <div className="max-w-4xl mx-auto mt-8 bg-white shadow rounded p-6">
-        <Reviews />
-      </div>
+      <Reviews />
     </div>
   );
 };

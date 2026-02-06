@@ -2,73 +2,112 @@ import { useState } from "react";
 import { useCart } from "../context/CartContext";
 
 const CartPage = () => {
-  const { cart, removeFromCart, total } = useCart();
-  const [paid, setPaid] = useState(false);
+  const { cart, increaseQty, decreaseQty } = useCart();
+  const [confirmed, setConfirmed] = useState(false);
 
-  if (cart.length === 0) {
+  const subtotal = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const discount = subtotal * 0.1;
+  const total = subtotal - discount;
+
+  const handlePayment = () => {
+    setConfirmed(true);
+  };
+
+  if (confirmed) {
     return (
-      <div className="p-10 text-center text-xl">
-        🛒 Your cart is empty
+      <div className="p-10 text-center">
+        <h1 className="text-3xl font-bold text-green-600">
+          🎉 Booking Confirmed!
+        </h1>
+        <p className="mt-4 text-lg">
+          Thank you for shopping with us ❤️
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">Your Cart</h1>
+    <div className="p-6 max-w-3xl mx-auto">
+      <h2 className="text-2xl font-bold mb-6">🛒 Your Cart</h2>
 
-      {/* CART ITEMS */}
-      <div className="space-y-6">
-        {cart.map((item) => (
-          <div
-            key={item.id}
-            className="flex items-center justify-between bg-[#222] p-4 rounded-xl shadow-md"
-          >
-            <div className="flex items-center gap-4">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="h-20 w-20 object-contain bg-white p-2 rounded"
-              />
+      {cart.length === 0 && (
+        <p className="text-gray-500">Cart is empty</p>
+      )}
 
-              <div>
-                <h2 className="font-semibold">{item.title}</h2>
-                <p className="text-sm text-gray-300">
-                  Qty: {item.quantity}
-                </p>
-                <p className="font-bold">₹ {item.price}</p>
-              </div>
+      {cart.map((item) => (
+        <div
+          key={item.id}
+          className="flex items-center gap-4 mb-5 border rounded-lg p-4 shadow-sm"
+        >
+          <img
+            src={item.image}
+            className="w-20 h-20 object-contain"
+          />
+
+          <div className="flex-1">
+            <h3 className="font-semibold">{item.title}</h3>
+            <p className="text-gray-600">₹ {item.price}</p>
+
+            {/* 🔥 PLUS MINUS PREMIUM */}
+            <div className="flex items-center gap-4 mt-3">
+              <button
+                onClick={() => decreaseQty(item.id)}
+                className="w-9 h-9 flex items-center justify-center 
+                rounded-full bg-red-100 text-red-600 
+                active:scale-90 transition"
+              >
+                −
+              </button>
+
+              <span className="font-bold text-lg">
+                {item.quantity}
+              </span>
+
+              <button
+                onClick={() => increaseQty(item.id)}
+                className="w-9 h-9 flex items-center justify-center 
+                rounded-full bg-green-100 text-green-600 
+                active:scale-90 transition"
+              >
+                +
+              </button>
             </div>
-
-            <button
-              onClick={() => removeFromCart(item.id)}
-              className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white"
-            >
-              Remove
-            </button>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
 
-      {/* TOTAL + PAYMENT */}
-      <div className="mt-10 bg-[#1a1a1d] p-6 rounded-xl shadow-lg text-center">
-        <h2 className="text-2xl font-bold mb-4">
-          Total Amount: ₹ {total ? total.toFixed(2) : "0.00"}
-        </h2>
+      {cart.length > 0 && (
+        <div className="mt-8 border-t pt-6">
+          <p className="flex justify-between">
+            <span>Subtotal</span>
+            <span>₹ {subtotal.toFixed(2)}</span>
+          </p>
 
-        {!paid ? (
+          <p className="flex justify-between text-green-600">
+            <span>Discount (10%)</span>
+            <span>- ₹ {discount.toFixed(2)}</span>
+          </p>
+
+          <h3 className="flex justify-between font-bold text-xl mt-2">
+            <span>Total</span>
+            <span>₹ {total.toFixed(2)}</span>
+          </h3>
+
+          {/* 🔥 PROCEED TO PAYMENT */}
           <button
-            onClick={() => setPaid(true)}
-            className="bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg text-lg font-semibold"
+            onClick={handlePayment}
+            className="w-full mt-6 bg-black text-white 
+            py-3 rounded-lg text-lg 
+            hover:bg-gray-800 transition"
           >
             Proceed to Payment
           </button>
-        ) : (
-          <p className="text-green-400 text-xl font-semibold mt-4">
-            ✅ Booking Confirmed! Thank you for shopping 💖
-          </p>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

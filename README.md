@@ -1,59 +1,66 @@
-# 🛒 Simple E-Commerce Add to Cart App (React + Router)
+# Simple E-Commerce App (Add to Cart using Router)
 
-This is a ReactJS based e-commerce application that allows users to browse products, add items to the cart, update quantities, and remove products from the cart.  
-The project focuses on cart functionality and routing using React Router.
+This is a simple e-commerce web application built using **ReactJS**.  
+The project demonstrates product listing, product details, add-to-cart functionality, and cart management using **React Router** and **Context API**.
 
 ---
 
 ## 🚀 Features
 
-- Display product list on the main page
-- Show product image, title, price, and description
+- Fetch products from **Fake Store API**
+- Display products on the home page in a responsive grid
+- Product details page using dynamic routing
 - Add products to cart
 - Remove products from cart
-- Increase and decrease product quantity
-- Dynamic total price calculation based on quantity
-- 10% discount applied on final cart total
-- Separate Product Page and Cart Page using React Router
-- Responsive UI using Tailwind CSS
-- Context API used for global cart state management
+- Increase / decrease product quantity in cart
+- Dynamic cart total calculation
+- **10% discount applied on final total**
+- Separate Cart Page
+- Clean UI built with Tailwind CSS
 
 ---
 
 ## 🛠 Tech Stack
 
-- ReactJS  
-- React Router DOM  
-- Tailwind CSS  
-- JavaScript (ES6+)  
+- ReactJS
+- TypeScript
+- React Router DOM
+- Context API
+- Tailwind CSS
+- Fake Store API
+- Vite
 
 ---
 
-## 📂 Project Structure
+## 📦 API Used
 
-src/
-│── components/
-│── context/
-│── layouts/
-│── pages/
-│── App.tsx
-│── main.tsx
+- Products List: https://fakestoreapi.com/products
+- Single Product: https://fakestoreapi.com/products/:id
 
+---
+
+## 📁 Pages & Routing
+
+- `/` → Home (All Products)
+- `/product/:id` → Product Details
+- `/cart` → Cart Page
+
+---
+
+## 🛒 Cart Functionality
+
+- Add to Cart
+- Remove from Cart
+- Increase / Decrease Quantity
+- Item total = price × quantity
+- Cart subtotal calculation
+- **10% discount applied**
+- Final payable amount displayed
 
 ---
 
 ## ▶️ How to Run the Project
 
-1. Clone the repository:
 ```bash
-git clone https://github.com/USERNAME/simple-e-commerce.git
-
-2. Navigate to the project folder:
-cd simple-e-commerce
-
-3. Install dependencies:
 npm install
-
-4. Start the development server:
 npm run dev
-
